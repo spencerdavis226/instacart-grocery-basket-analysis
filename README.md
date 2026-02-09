@@ -18,7 +18,7 @@
 ![Customer Profile by Region](assets/cust_profile_by_region.png)
 
 ## Deliverables
-- **Executive Summary (PDF):** `report/Instacart_Grocery_Basket_Analysis_Executive_Summary.pdf`
+- **Executive Summary (PDF):** `report/Instacart Executive Summary.pdf`
 - **Notebooks:** See the `notebooks/` folder for full analysis workflow
 
 ## Tools
