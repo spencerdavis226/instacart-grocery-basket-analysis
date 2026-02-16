@@ -1,26 +1,46 @@
-# Instacart Grocery Basket Analysis (Python EDA + Customer Segmentation)
+# Instacart Grocery Basket Analysis
 
-**Goal:** Analyze grocery ordering behavior to identify **demand patterns** and **customer segments** that can inform marketing strategy and operational planning.
+Portfolio project analyzing grocery purchasing behavior to identify customer segments and shopping patterns, and translate those findings into actionable recommendations.
 
-## Key Insights
-- **Weekend demand is highest** (Sat/Sun), with midweek slower → supports promo scheduling and staffing.
-- **Peak ordering window is late morning to afternoon** (strongest ~10:00–15:00) → helps time ads and capacity planning.
-- **Customer behavior differs by segment and region** → supports targeted campaigns by customer profile and geography.
-
-## Visual Highlights
-### Order Frequency by Day of Week
-![Order Frequency by Day of Week](assets/order_freq_dow.png)
-
-### Order Frequency by Hour of Day
-![Order Frequency by Hour of Day](assets/order_freq_hour_of_day.png)
-
-### Customer Profile by Region
-![Customer Profile by Region](assets/cust_profile_by_region.png)
-
-## Deliverables (What’s Included)
+## Quick links
 - **Executive Summary (PDF):** `report/Instacart Executive Summary.pdf`
-- **Excel Report (stakeholder deliverable):** `report/Instacart_Final_Report.xlsx`
-- **Notebooks (full workflow):** `notebooks/` (data prep → analysis → visuals)
+- **Notebook — Build dataset:** `notebooks/01_build_analytic_dataset.ipynb`
+- **Notebook — Analysis & insights:** `notebooks/02_analysis_and_insights.ipynb`
 
-## Tools
-Python, pandas, NumPy, matplotlib/seaborn, SciPy, Jupyter
+---
+
+## Project overview
+This project turns raw Instacart order/product/customer tables into a reusable analytic dataset, then explores:
+- shopping peaks (day-of-week / time-of-day),
+- product/category patterns,
+- customer behavior signals (e.g., reorder habits),
+- and segment differences that support business recommendations.
+
+---
+
+## Repo structure
+- `notebooks/`  
+  - `01_build_analytic_dataset.ipynb` — reproducible pipeline to create an analytic dataset  
+  - `02_analysis_and_insights.ipynb` — feature engineering + EDA + segmentation + findings
+- `src/`  
+  - Python script versions of the notebooks (same logic, easier to skim)
+- `report/`  
+  - PDF executive summary
+- `assets/`  
+  - charts / visuals used in the report
+- `tools/`  
+  - helper scripts used to generate/organize portfolio artifacts
+
+> Note: `course_notebooks/` contains archived working notebooks from the learning process. The polished deliverables live in `notebooks/` and `src/`.
+
+---
+
+## How to run locally (no data included)
+The original Instacart dataset is not included in this public repository.
+
+### 1) Set up environment
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -r requirements.txt
