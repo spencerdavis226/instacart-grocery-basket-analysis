@@ -35,6 +35,17 @@ BUILD_DATASET_INPUTS = [
     "4.6 part 2 Combining & Exporting Data.ipynb",
 ]
 
+SECTION_TITLE_MAP = {
+    "4.3 IC Data Import": "Load Raw Data",
+    "4.5 Data Consistency Checks": "Data Quality Checks",
+    "4.6 Combining & Exporting Data": "Merge Tables",
+    "4.6 part 2 Combining & Exporting Data": "Merge Validation & Export",
+    "4.7 Deriving New Variables": "Feature Engineering",
+    "4.8 Grouping Data & Aggregating Variables": "Aggregations",
+    "4.9 Task 2": "Visualizations & Demographics",
+    "4.10 Task 1": "Regional Segmentation",
+}
+
 ANALYSIS_INPUTS = [
     "4.7 Deriving New Variables.ipynb",
     "4.8 Grouping Data & Aggregating Variables.ipynb",
