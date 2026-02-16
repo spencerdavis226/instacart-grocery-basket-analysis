@@ -6,7 +6,7 @@ Generated from course notebooks via tools/merge_course_notebooks.py
 
 
 #----------------------------------------------------------------------
-# 4.3 IC Data Import
+# Load Raw Data
 #----------------------------------------------------------------------
 
 # Import libraries
@@ -40,7 +40,7 @@ df_prods.info()
 
 
 #----------------------------------------------------------------------
-# 4.5 Data Consistency Checks
+# Data Quality Checks
 #----------------------------------------------------------------------
 
 # Import libraries
@@ -122,7 +122,7 @@ df_ords.to_csv(os.path.join(path, '02 Data','Prepared Data', 'orders_checked.csv
 
 
 #----------------------------------------------------------------------
-# 4.6 Combining & Exporting Data
+# Merge Tables
 #----------------------------------------------------------------------
 
 # Import libraries
@@ -163,7 +163,7 @@ df_merged_large.to_pickle(os.path.join(path, '02 Data','Prepared Data', 'orders_
 
 
 #----------------------------------------------------------------------
-# 4.6 part 2 Combining & Exporting Data
+# Merge Validation & Export
 #----------------------------------------------------------------------
 
 # Import libraries

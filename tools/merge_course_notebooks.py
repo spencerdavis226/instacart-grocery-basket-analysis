@@ -72,6 +72,24 @@ DROP_MD_PATTERNS = [
 ]
 
 
+def resolve_notebook_path(fname: str) -> Path | None:
+    """Return the existing path for a notebook filename.
+
+    Looks in:
+      - course_notebooks/
+      - course_notebooks/_archive/
+    """
+    direct = IN_DIR / fname
+    if direct.exists():
+        return direct
+
+    archived = IN_DIR / "_archive" / fname
+    if archived.exists():
+        return archived
+
+    return None
+
+
 def _contains_drop_phrase(text: str) -> bool:
     t = (text or "").lower()
     return any(p in t for p in DROP_PHRASES)
@@ -162,11 +180,13 @@ def main() -> None:
 
     # You can tweak section mapping if you want, but this is a good default.
     for fname in BUILD_DATASET_INPUTS:
-        nb_path = IN_DIR / fname
-        if not nb_path.exists():
-            raise FileNotFoundError(f"Missing input notebook: {nb_path}")
+        nb_path = resolve_notebook_path(fname)
+        if nb_path is None:
+            print(f"⚠️  Skipping missing input notebook: {IN_DIR / fname}")
+            continue
         code = extract_clean_code_cells(nb_path)
-        section_name = fname.replace(".ipynb", "")
+        raw_name = fname.replace(".ipynb", "")
+        section_name = SECTION_TITLE_MAP.get(raw_name, raw_name)
         build_sections.append((section_name, code))
 
     build_nb = build_notebook(
@@ -190,11 +210,13 @@ def main() -> None:
     # --- Analysis & insights notebook ---
     analysis_sections: List[Tuple[str, List[str]]] = []
     for fname in ANALYSIS_INPUTS:
-        nb_path = IN_DIR / fname
-        if not nb_path.exists():
-            raise FileNotFoundError(f"Missing input notebook: {nb_path}")
+        nb_path = resolve_notebook_path(fname)
+        if nb_path is None:
+            print(f"⚠️  Skipping missing input notebook: {IN_DIR / fname}")
+            continue
         code = extract_clean_code_cells(nb_path)
-        section_name = fname.replace(".ipynb", "")
+        raw_name = fname.replace(".ipynb", "")
+        section_name = SECTION_TITLE_MAP.get(raw_name, raw_name)
         analysis_sections.append((section_name, code))
 
     analysis_nb = build_notebook(
