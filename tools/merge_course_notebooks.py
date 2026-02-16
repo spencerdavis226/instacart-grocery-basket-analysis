@@ -38,6 +38,8 @@ BUILD_DATASET_INPUTS = [
 ANALYSIS_INPUTS = [
     "4.7 Deriving New Variables.ipynb",
     "4.8 Grouping Data & Aggregating Variables.ipynb",
+    "4.9 Task 2.ipynb",
+    "4.10 Task 1.ipynb",
 ]
 
 # Anything containing these phrases will be dropped entirely (any cell type)
