@@ -10,49 +10,60 @@ Generated from course notebooks via tools/merge_course_notebooks.py
 #----------------------------------------------------------------------
 
 # Import libraries
-import pandas as pd
-import numpy as np
 import os
+from pathlib import Path
 
-path = r'/Users/spencer/Documents/Career Foundry/Data Immersion/4 Python Fundamentals for Data Analysts/Instacart Basket Analysis'
+import numpy as np
+import pandas as pd
 
-vars_list = ['order_id', 'user_id', 'order_number', 'order_dow', 'order_hour_of_day', 'days_since_prior_order']
+# Base project path (repo root)
+# This file lives in /src, so repo root is one level up.
+BASE_DIR = Path(__file__).resolve().parents[1]
+DATA_DIR = BASE_DIR / '02 Data'
+RAW_DIR = DATA_DIR / 'Original Data'
+PREP_DIR = DATA_DIR / 'Prepared Data'
 
-df = pd.read_csv(os.path.join(path, '02 Data', 'Original Data', 'orders.csv'), usecols = vars_list)
+# Make sure prepared data folder exists
+PREP_DIR.mkdir(parents=True, exist_ok=True)
 
-df.shape
+vars_list = [
+  'order_id',
+  'user_id',
+  'order_number',
+  'order_dow',
+  'order_hour_of_day',
+  'days_since_prior_order'
+]
 
-df.head()
+df = pd.read_csv(RAW_DIR / 'orders.csv', usecols = vars_list)
 
-df_prods = pd.read_csv(os.path.join(path, '02 Data', 'Original Data', 'products.csv'), index_col = False)
+print(df.shape)
 
-df_prods.head(20)
+print(df.head())
 
-df_prods.tail(35)
+df_prods = pd.read_csv(RAW_DIR / 'products.csv', index_col = False)
 
-df_prods.columns
+print(df_prods.head(20))
 
-df_prods.shape
+print(df_prods.tail(35))
 
-df_prods.describe()
+print(df_prods.columns)
 
-df_prods.info()
+print(df_prods.shape)
+
+print(df_prods.describe())
+
+print(df_prods.info())
 
 
 #----------------------------------------------------------------------
 # Data Quality Checks
 #----------------------------------------------------------------------
 
-# Import libraries
-import pandas as pd
-import numpy as np
-import os
-
 # Import datasets
-path = r'/Users/spencer/Documents/Career Foundry/Data Immersion/4 Python Fundamentals for Data Analysts/Instacart Basket Analysis'
-df_ords = pd.read_csv(os.path.join(path, '02 Data', 'Prepared Data', 'orders_wrangled.csv'), index_col = False)
-df_prods = pd.read_csv(os.path.join(path, '02 Data', 'Original Data', 'products.csv'), index_col = False)
-df_dep = pd.read_csv(os.path.join(path, '02 Data', 'Prepared Data', 'departments_wrangled.csv'), index_col = False)
+df_ords = pd.read_csv(PREP_DIR / 'orders_wrangled.csv', index_col=False)
+df_prods = pd.read_csv(RAW_DIR / 'products.csv', index_col=False)
+df_dep = pd.read_csv(PREP_DIR / 'departments_wrangled.csv', index_col=False)
 
 # Create a dataframe
 
@@ -62,7 +73,7 @@ df_test = pd.DataFrame()
 
 df_test['mix'] = ['a', 'b', 1, True]
 
-df_test.head()
+print(df_test.head())
 
 for col in df_test.columns.tolist():
   weird = (df_test[[col]].map(type) != df_test[[col]].iloc[0].apply(type)).any(axis = 1)
@@ -75,137 +86,122 @@ df_prods.isnull().sum()
 
 df_nan = df_prods[df_prods['product_name'].isnull() == True]
 
-df_nan
+print(df_nan)
 
-df_prods.shape
+print(df_prods.shape)
 
 # Make new dataframe, removing null 'product_name' values
 df_prods_clean = df_prods[df_prods['product_name'].isnull() == False]
 
-df_prods_clean.shape
+print(df_prods_clean.shape)
 
 df_dups = df_prods_clean[df_prods_clean.duplicated()]
 
-df_dups
+print(df_dups)
 
-df_prods_clean.shape
+print(df_prods_clean.shape)
 
 df_prods_clean_no_dups = df_prods_clean.drop_duplicates()
 
-df_prods_clean_no_dups.shape
+print(df_prods_clean_no_dups.shape)
 
-df_ords.describe()
+print(df_ords.describe())
 
-# Sanity check to make sure it wasnt a trick question?
-df_ords.head(10)
+print(df_ords.head(10))
 
 for col in df_ords.columns.tolist():
   weird = (df_ords[[col]].map(type) != df_ords[[col]].iloc[0].apply(type)).any(axis = 1)
   if len (df_ords[weird]) > 0:
     print (col)
 
-df_ords.isnull().sum()
+print(df_ords.isnull().sum())
 
 # Create a new column 'first_order' if 'days_since_prior_order' is null
 df_ords['first_order'] = df_ords['days_since_prior_order'].isnull()
 
 # Check work
-df_ords.head()
+print(df_ords.head())
 
 df_ords_dups = df_ords[df_ords.duplicated()]
 
-df_ords_dups
+print(df_ords_dups)
 
-df_prods_clean_no_dups.to_csv(os.path.join(path, '02 Data','Prepared Data', 'products_checked.csv'), index=False)
-
-df_ords.to_csv(os.path.join(path, '02 Data','Prepared Data', 'orders_checked.csv'), index=False)
+df_prods_clean_no_dups.to_csv(PREP_DIR / 'products_checked.csv', index=False)
+df_ords.to_csv(PREP_DIR / 'orders_checked.csv', index=False)
 
 
 #----------------------------------------------------------------------
 # Merge Tables
 #----------------------------------------------------------------------
 
-# Import libraries
-import pandas as pd
-import numpy as np
-import os
-
 # Import datasets
-path = r'/Users/spencer/Documents/Career Foundry/Data Immersion/4 Python Fundamentals for Data Analysts/Instacart Basket Analysis'
-df_ords = pd.read_csv(os.path.join(path, '02 Data', 'Prepared Data', 'orders_checked.csv'), index_col = False)
-df_prods = pd.read_csv(os.path.join(path, '02 Data', 'Prepared Data', 'products_checked.csv'), index_col = False)
-df_dep = pd.read_csv(os.path.join(path, '02 Data', 'Prepared Data', 'departments_wrangled.csv'), index_col = False)
-df_ords_prior = pd.read_csv(os.path.join(path, '02 Data', 'Original Data', 'orders_products_prior.csv'), index_col = False)
+df_ords = pd.read_csv(PREP_DIR / 'orders_checked.csv', index_col=False)
+df_prods = pd.read_csv(PREP_DIR / 'products_checked.csv', index_col=False)
+df_dep = pd.read_csv(PREP_DIR / 'departments_wrangled.csv', index_col=False)
+df_ords_prior = pd.read_csv(RAW_DIR / 'orders_products_prior.csv', index_col=False)
 
-df_ords_prior.head()
+print(df_ords_prior.head())
 
-df_ords.head()
+print(df_ords.head())
 
-df_ords_prior.shape
+print(df_ords_prior.shape)
 
-df_ords.shape
+print(df_ords.shape)
 
 df_merged_large = df_ords.merge(df_ords_prior, on = 'order_id', indicator = True)
 
 # check output
-df_merged_large.head()
+print(df_merged_large.head())
 
-df_merged_large.shape
+print(df_merged_large.shape)
 
-df_merged_large['_merge'].value_counts()
+print(df_merged_large['_merge'].value_counts())
 
 # drop indicator flag (_merge)
 df_merged_large = df_merged_large.drop(columns = ['_merge'])
 
-df_merged_large.head()
+print(df_merged_large.head())
 
-df_merged_large.to_pickle(os.path.join(path, '02 Data','Prepared Data', 'orders_products_combined.pkl'))
+df_merged_large.to_pickle(PREP_DIR / 'orders_products_combined.pkl')
 
 
 #----------------------------------------------------------------------
 # Merge Validation & Export
 #----------------------------------------------------------------------
 
-# Import libraries
-import pandas as pd
-import numpy as np
-import os
-
 # Import datasets
-path = r'/Users/spencer/Documents/Career Foundry/Data Immersion/4 Python Fundamentals for Data Analysts/Instacart Basket Analysis'
-df_ords = pd.read_csv(os.path.join(path, '02 Data', 'Prepared Data', 'orders_checked.csv'), index_col = False)
-df_prods = pd.read_csv(os.path.join(path, '02 Data', 'Prepared Data', 'products_checked.csv'), index_col = False)
-df_dep = pd.read_csv(os.path.join(path, '02 Data', 'Prepared Data', 'departments_wrangled.csv'), index_col = False)
-df_ords_prior = pd.read_csv(os.path.join(path, '02 Data', 'Original Data', 'orders_products_prior.csv'), index_col = False)
-df_ords_prods_comb = pd.read_pickle(os.path.join(path, '02 Data', 'Prepared Data', 'orders_products_combined.pkl'))
+df_ords = pd.read_csv(PREP_DIR / 'orders_checked.csv', index_col=False)
+df_prods = pd.read_csv(PREP_DIR / 'products_checked.csv', index_col=False)
+df_dep = pd.read_csv(PREP_DIR / 'departments_wrangled.csv', index_col=False)
+df_ords_prior = pd.read_csv(RAW_DIR / 'orders_products_prior.csv', index_col=False)
+df_ords_prods_comb = pd.read_pickle(PREP_DIR / 'orders_products_combined.pkl')
 
-# verify shape
-df_ords_prods_comb.shape
+print(df_ords_prods_comb.shape)
 
-df_ords_prods_comb.head()
+print(df_ords_prods_comb.head())
 
-df_prods.head()
+print(df_prods.head())
 
-df_prods.shape
+print(df_prods.shape)
 
-print(df_prods[df_prods.duplicated()])
+print(df_prods[df_prods.duplicated()])  # full-row duplicates
 
 df_dups = df_prods[df_prods.duplicated(subset=['product_id'])]
 print(df_dups)
 
 df_prods = df_prods.drop_duplicates(subset=['product_id'])
 
-df_prods.shape
+print(df_prods.shape)
 
 df_merged = df_ords_prods_comb.merge(df_prods, on = 'product_id', how = 'left', indicator = True)
 
-df_merged['_merge'].value_counts()
+print(df_merged['_merge'].value_counts())
 
 # expect 32434489 rows
-df_merged.shape
+print(df_merged.shape)
 
 df_merged = df_merged.drop(columns = ['_merge'])
 
-df_merged.head()
+print(df_merged.head())
 
-df_merged.to_pickle(os.path.join(path, '02 Data','Prepared Data', 'ords_prods_merge.pkl'))
+df_merged.to_pickle(PREP_DIR / 'ords_prods_merge.pkl')
